@@ -5,6 +5,10 @@ VisualStudioVersion = 17.14.36202.13 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KASHOP.PL", "KASHOP.PL\KASHOP.PL.csproj", "{0E6F02A3-3A8F-4957-B0AD-2B32573D9B3B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KASHOP.DAL", "KASHOP.DAL\KASHOP.DAL.csproj", "{45ECCCDE-41D7-47FD-BD43-DE775F4BB1F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KASHOP.BLL", "KASHOP.BLL\KASHOP.BLL.csproj", "{47F2377E-C771-49CE-A24E-D23C3C1E71F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{0E6F02A3-3A8F-4957-B0AD-2B32573D9B3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E6F02A3-3A8F-4957-B0AD-2B32573D9B3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E6F02A3-3A8F-4957-B0AD-2B32573D9B3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45ECCCDE-41D7-47FD-BD43-DE775F4BB1F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45ECCCDE-41D7-47FD-BD43-DE775F4BB1F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45ECCCDE-41D7-47FD-BD43-DE775F4BB1F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45ECCCDE-41D7-47FD-BD43-DE775F4BB1F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47F2377E-C771-49CE-A24E-D23C3C1E71F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47F2377E-C771-49CE-A24E-D23C3C1E71F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47F2377E-C771-49CE-A24E-D23C3C1E71F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47F2377E-C771-49CE-A24E-D23C3C1E71F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
