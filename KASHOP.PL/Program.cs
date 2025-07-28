@@ -1,7 +1,8 @@
-
-using KASHOP.BLL.Services;
+using KASHOP.BLL.Services.Classes;
+using KASHOP.BLL.Services.Interfaces;
 using KASHOP.DAL.Data;
-using KASHOP.DAL.Repositories;
+using KASHOP.DAL.Repositories.Classes;
+using KASHOP.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Scalar;
 using Scalar.AspNetCore;
@@ -24,6 +25,8 @@ namespace KASHOP.PL
 
             builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
             builder.Services.AddScoped<ICategoryService,CategoryService>();
+            builder.Services.AddScoped<IBrandRepository,BrandRepository>();
+            builder.Services.AddScoped<IBrandService,BrandService>();
 
 
             var app = builder.Build();
@@ -33,6 +36,7 @@ namespace KASHOP.PL
             {
                 app.MapOpenApi();
                 app.MapScalarApiReference();
+                
             }
 
             app.UseHttpsRedirection();

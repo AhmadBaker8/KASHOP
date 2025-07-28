@@ -6,46 +6,46 @@ namespace KASHOP.PL.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CategoriesController : ControllerBase
+    public class BrandsController : ControllerBase
     {
-        private readonly ICategoryService _categoryService;
+        private readonly IBrandService _brandService;
 
-        public CategoriesController(ICategoryService categoryService)
+        public BrandsController(IBrandService brandService)
         {
-            _categoryService = categoryService;
+            _brandService = brandService;
         }
         [HttpGet("")]
-        public IActionResult GetAll()=>Ok(_categoryService.GetAll());
+        public IActionResult GetAll()=>Ok(_brandService.GetAll());
         
         [HttpGet("{id}")]
         public IActionResult Get([FromRoute] int id)
         {
-            var category = _categoryService.GetById(id);
-            if (category is null) return NotFound();
-            return Ok(category);
+            var brand = _brandService.GetById(id);
+            if (brand is null) return NotFound();
+            return Ok(brand);
         }
         [HttpPost("")]
-        public IActionResult Create([FromBody] CategoryRequest request)
+        public IActionResult Create([FromBody] BrandRequest request)
         {
-            var id = _categoryService.Create(request);
+            var id = _brandService.Create(request);
             return CreatedAtAction(nameof(Get),new {id}, new {message = request} );
         }
         [HttpPatch("{id}")]
-        public IActionResult Update([FromRoute] int id,[FromBody] CategoryRequest request)
+        public IActionResult Update([FromRoute] int id,[FromBody] BrandRequest request)
         {
-            var updated = _categoryService.Update(id,request);
+            var updated = _brandService.Update(id,request);
             return updated > 0 ? Ok() : NotFound();
         }
         [HttpPatch("toggleStatus/{id}")]
         public IActionResult ToggleStatus([FromRoute] int id)
         {
-            var updated = _categoryService.ToggleStatus(id);
+            var updated = _brandService.ToggleStatus(id);
             return updated ? Ok(new { message = "status toggled" }) : NotFound();
         }
         [HttpDelete("")]
         public IActionResult Delete(int id)
         {
-            var deleted = _categoryService.Delete(id);
+            var deleted = _brandService.Delete(id);
             return deleted > 0 ? Ok() : NotFound();
         }
     }
