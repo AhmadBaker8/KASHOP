@@ -61,21 +61,24 @@ namespace KASHOP.DAL.Utils
                     Email = "Ahmad@gmail.com",
                     FullName = "AhmadBaker",
                     PhoneNumber = "0568178976",
-                    UserName = "ABaker"
+                    UserName = "ABaker",
+                    EmailConfirmed = true
                 };
                 var user2 = new ApplicationUser()
                 {
                     Email = "anas@gmail.com",
                     FullName = "AnasAnas",
                     PhoneNumber = "0568125658",
-                    UserName = "A_Anas"
+                    UserName = "A_Anas",
+                    EmailConfirmed = true
                 };
                 var user3 = new ApplicationUser()
                 {
                     Email = "abd@gmail.com",
                     FullName = "abdabd",
                     PhoneNumber = "0568456852",
-                    UserName = "A_Abd"
+                    UserName = "A_Abd",
+                    EmailConfirmed = true
                 };
                 await _userManager.CreateAsync(user1,"Pass@1212");
                 await _userManager.CreateAsync(user2,"Pass@1212");
