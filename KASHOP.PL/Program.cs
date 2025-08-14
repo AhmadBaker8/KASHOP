@@ -34,7 +34,13 @@ namespace KASHOP.PL
             builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
             builder.Services.AddScoped<ICategoryService,CategoryService>();
             builder.Services.AddScoped<IBrandRepository,BrandRepository>();
+
             builder.Services.AddScoped<IBrandService,BrandService>();
+            builder.Services.AddScoped<IProductRepository,ProductRepository>();
+            builder.Services.AddScoped<IProductService, ProductService>();
+
+            builder.Services.AddScoped<IFileService, FileService>();
+
             builder.Services.AddScoped<ISeedData,SeedData>();
             builder.Services.AddScoped<IAuthenticationService,AuthenticationService>();
             builder.Services.AddScoped<IEmailSender, EmailSetting>();
@@ -87,7 +93,8 @@ namespace KASHOP.PL
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            // ???? ?????
+            app.UseStaticFiles();
 
             app.MapControllers();
 

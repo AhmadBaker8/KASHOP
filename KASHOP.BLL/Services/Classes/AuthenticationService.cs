@@ -70,16 +70,17 @@ namespace KASHOP.BLL.Services.Classes
                 var escapeToken = Uri.EscapeDataString(token);
                 var emailUrl = $"https://localhost:7156/api/identity/Account/ConfimEmail?token={escapeToken}&userId={user.Id}";
 
-                await _emailSender.SendEmailAsync(user.Email, "welcome", $"<h1> Hello {user.UserName}</h1> " + $"<a href='{emailUrl}'/>");
+                await _emailSender.SendEmailAsync(user.Email, "welcome", $"<h1> Hello {user.UserName}</h1> " + $"<a href='{emailUrl}'> Confirm </a>");
 
                 return new UserResponse()
                 {
-                    Token = registerRequest.Email,
+                    Token = await CreateTokenAsync(user),
                 };
             }
             else
             {
-                throw new Exception($"{Result.Errors}");
+                var errors = string.Join(", ", Result.Errors.Select(e => e.Description));
+                throw new Exception(errors);
             }
 
         }
