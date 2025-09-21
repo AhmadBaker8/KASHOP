@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar;
 using Scalar.AspNetCore;
+using Stripe;
 using System.Text;
 
 namespace KASHOP.PL
@@ -37,9 +38,11 @@ namespace KASHOP.PL
 
             builder.Services.AddScoped<IBrandService,BrandService>();
             builder.Services.AddScoped<IProductRepository,ProductRepository>();
-            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<ICartRepository,CartRepository>();
+            builder.Services.AddScoped<IProductService, BLL.Services.Classes.ProductService>();
+            builder.Services.AddScoped<ICartService, CartService>();
 
-            builder.Services.AddScoped<IFileService, FileService>();
+            builder.Services.AddScoped<IFileService, BLL.Services.Classes.FileService>();
 
             builder.Services.AddScoped<ISeedData,SeedData>();
             builder.Services.AddScoped<IAuthenticationService,AuthenticationService>();
@@ -73,6 +76,9 @@ namespace KASHOP.PL
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("jwtOptions")["SecretKey"]))
             };
         });
+
+            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+            StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
             var app = builder.Build();
 

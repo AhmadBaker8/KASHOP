@@ -8,51 +8,43 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
-namespace KASHOP.DAL.Utils
-{
+namespace KASHOP.DAL.Utils {
     public class SeedData : ISeedData
     {
         private readonly ApplicationDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
-
-        public SeedData(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
-        {
-            _context = context;
+        public SeedData(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager) 
+        { _context = context;
             _roleManager = roleManager;
             _userManager = userManager;
-        } 
-        public async Task DataSeedingAsync()
+        } public async Task DataSeedingAsync()
         {
-            if((await _context.Database.GetPendingMigrationsAsync()).Any())
-            {
+            if ((await _context.Database.GetPendingMigrationsAsync()).Any())
+            { 
                 await _context.Database.MigrateAsync();
-            }
-            if(!await _context.Categories.AnyAsync())
-            {
+            } 
+            if (!await _context.Categories.AnyAsync())
+            { 
                 await _context.Categories.AddRangeAsync(
-                    new Category { Name="Clothes" },
-                    new Category { Name="Mobiles" }
-                    );
+                    new Category { Name = "Clothes" },
+                    new Category { Name = "Mobiles" });
             }
-
-            if (!await _context.Brands.AnyAsync())
-            {
+            if (!await _context.Brands.AnyAsync()) 
+            { 
                 await _context.Brands.AddRangeAsync(
                     new Brand { Name = "Samsung" },
-                    new Brand { Name = "Apple" }
-                    );
+                    new Brand { Name = "Apple" });
             }
             await _context.SaveChangesAsync();
         }
-
-        public async Task IdentityDataSeedingAsync()
+        public async Task IdentityDataSeedingAsync() 
         {
-            if(!await _roleManager.Roles.AnyAsync())
+            if (!await _roleManager.Roles.AnyAsync()) 
             {
                 await _roleManager.CreateAsync(new IdentityRole("Admin"));
                 await _roleManager.CreateAsync(new IdentityRole("SuperAdmin"));
-                await _roleManager.CreateAsync(new IdentityRole("Customer"));
+                await _roleManager.CreateAsync(new IdentityRole("Customer")); 
             }
             if (!await _userManager.Users.AnyAsync())
             {
@@ -64,6 +56,12 @@ namespace KASHOP.DAL.Utils
                     UserName = "ABaker",
                     EmailConfirmed = true
                 };
+                var result1 = await _userManager.CreateAsync(user1, "Pass@1212x");
+                if (result1.Succeeded)
+                    await _userManager.AddToRoleAsync(user1, "Admin");
+                else
+                    throw new Exception(string.Join(", ", result1.Errors.Select(e => e.Description)));
+
                 var user2 = new ApplicationUser()
                 {
                     Email = "anas@gmail.com",
@@ -72,6 +70,12 @@ namespace KASHOP.DAL.Utils
                     UserName = "A_Anas",
                     EmailConfirmed = true
                 };
+                var result2 = await _userManager.CreateAsync(user2, "Pass@1212x");
+                if (result2.Succeeded)
+                    await _userManager.AddToRoleAsync(user2, "SuperAdmin");
+                else
+                    throw new Exception(string.Join(", ", result2.Errors.Select(e => e.Description)));
+
                 var user3 = new ApplicationUser()
                 {
                     Email = "abd@gmail.com",
@@ -80,18 +84,13 @@ namespace KASHOP.DAL.Utils
                     UserName = "A_Abd",
                     EmailConfirmed = true
                 };
-                await _userManager.CreateAsync(user1,"Pass@1212");
-                await _userManager.CreateAsync(user2,"Pass@1212");
-                await _userManager.CreateAsync(user3,"Pass@1212");
-
-                await _userManager.AddToRoleAsync(user1, "Admin");
-                await _userManager.AddToRoleAsync(user2, "SuperAdmin");
-                await _userManager.AddToRoleAsync(user3, "Customer");
+                var result3 = await _userManager.CreateAsync(user3, "Pass@1212x");
+                if (result3.Succeeded)
+                    await _userManager.AddToRoleAsync(user3, "Customer");
+                else
+                    throw new Exception(string.Join(", ", result3.Errors.Select(e => e.Description)));
             }
-
             await _context.SaveChangesAsync();
         }
-
-        
-    }
+    } 
 }

@@ -2,6 +2,7 @@
 using KASHOP.DAL.DTO.Requests;
 using KASHOP.DAL.DTO.Responses;
 using KASHOP.DAL.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
@@ -52,7 +53,7 @@ namespace KASHOP.BLL.Services.Classes
             };
         }
 
-        public async Task<UserResponse> RegisterAsync(RegisterRequest registerRequest)
+        public async Task<UserResponse> RegisterAsync(RegisterRequest registerRequest, HttpRequest request)
         {
 
             var user = new ApplicationUser()
@@ -68,7 +69,7 @@ namespace KASHOP.BLL.Services.Classes
 
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var escapeToken = Uri.EscapeDataString(token);
-                var emailUrl = $"https://localhost:7156/api/identity/Account/ConfimEmail?token={escapeToken}&userId={user.Id}";
+                var emailUrl = $"{request.Scheme}://{request.Host}/api/identity/Account/ConfimEmail?token={escapeToken}&userId={user.Id}";
 
                 await _emailSender.SendEmailAsync(user.Email, "welcome", $"<h1> Hello {user.UserName}</h1> " + $"<a href='{emailUrl}'> Confirm </a>");
 

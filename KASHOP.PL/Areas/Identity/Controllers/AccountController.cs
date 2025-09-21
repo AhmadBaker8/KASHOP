@@ -21,7 +21,7 @@ namespace KASHOP.PL.Areas.Identity.Controllers
         [HttpPost("Register")]
         public async Task<ActionResult<UserResponse>> Register(RegisterRequest registerRequest)
         {
-            var result = await _authenticationService.RegisterAsync(registerRequest);
+            var result = await _authenticationService.RegisterAsync(registerRequest,Request);
             return Ok(result);
         }
 

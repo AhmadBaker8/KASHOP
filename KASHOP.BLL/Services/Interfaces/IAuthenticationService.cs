@@ -1,5 +1,6 @@
 ﻿using KASHOP.DAL.DTO.Requests;
 using KASHOP.DAL.DTO.Responses;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace KASHOP.BLL.Services.Interfaces
     public interface IAuthenticationService
     {
         Task<UserResponse> LoginAsync(LoginRequest loginRequest);
-        Task<UserResponse> RegisterAsync(RegisterRequest registerRequest);
+        Task<UserResponse> RegisterAsync(RegisterRequest registerRequest,HttpRequest request);
 
         Task<string> ConfirmEmail(string token, string userId);
 
