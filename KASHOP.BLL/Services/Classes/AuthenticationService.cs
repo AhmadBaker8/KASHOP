@@ -21,12 +21,15 @@ namespace KASHOP.BLL.Services.Classes
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IEmailSender _emailSender;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        
 
-        public AuthenticationService(UserManager<ApplicationUser> userManager,IConfiguration configuration, IEmailSender emailSender)
+        public AuthenticationService(UserManager<ApplicationUser> userManager,IConfiguration configuration, IEmailSender emailSender, SignInManager<ApplicationUser> SignInManager)
         {
             _userManager = userManager;
             _configuration = configuration;
             _emailSender = emailSender;
+            _signInManager = SignInManager;
         }
         public async Task<UserResponse> LoginAsync(LoginRequest loginRequest)
         {
@@ -36,21 +39,28 @@ namespace KASHOP.BLL.Services.Classes
                 throw new Exception("Invalid email ro password");
             }
 
-            if(!await _userManager.IsEmailConfirmedAsync(user))
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginRequest.Password, true);
+            if (result.Succeeded)
             {
-                throw new Exception("please confirm your email");
+                return new UserResponse
+                {
+                    Token = await CreateTokenAsync(user)
+                };
+            }
+            else if(result.IsLockedOut)
+            {
+                throw new Exception("user is locked out");
+            }
+            else if(result.IsNotAllowed)
+            {
+                throw new Exception("not allowed to login");
+            }
+            else
+            {
+                throw new Exception("Invalid email or password");
             }
 
-            var isPasswordValid = await _userManager.CheckPasswordAsync(user, loginRequest.Password);
-            if(!isPasswordValid)
-            {
-                throw new Exception("Invalid email ro password");
-            }
-             
-            return new UserResponse
-            {
-                Token = await CreateTokenAsync(user)
-            };
+            
         }
 
         public async Task<UserResponse> RegisterAsync(RegisterRequest registerRequest, HttpRequest request)
@@ -70,6 +80,8 @@ namespace KASHOP.BLL.Services.Classes
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var escapeToken = Uri.EscapeDataString(token);
                 var emailUrl = $"{request.Scheme}://{request.Host}/api/identity/Account/ConfimEmail?token={escapeToken}&userId={user.Id}";
+
+                await _userManager.AddToRoleAsync(user, "Customer");
 
                 await _emailSender.SendEmailAsync(user.Email, "welcome", $"<h1> Hello {user.UserName}</h1> " + $"<a href='{emailUrl}'> Confirm </a>");
 

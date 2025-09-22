@@ -18,7 +18,8 @@ namespace KASHOP.DAL.Utils {
         { _context = context;
             _roleManager = roleManager;
             _userManager = userManager;
-        } public async Task DataSeedingAsync()
+        }
+        public async Task DataSeedingAsync()
         {
             if ((await _context.Database.GetPendingMigrationsAsync()).Any())
             { 
@@ -33,8 +34,9 @@ namespace KASHOP.DAL.Utils {
             if (!await _context.Brands.AnyAsync()) 
             { 
                 await _context.Brands.AddRangeAsync(
-                    new Brand { Name = "Samsung" },
-                    new Brand { Name = "Apple" });
+                    new Brand { Name = "Samsung", Image="samsung-logo.jpg" },
+                    new Brand { Name = "Apple", Image="iPhone-Logo.png" },
+                    new Brand { Name = "Adidas", Image = "Adidas-Logo.svg" });
             }
             await _context.SaveChangesAsync();
         }

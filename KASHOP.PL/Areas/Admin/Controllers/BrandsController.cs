@@ -31,9 +31,9 @@ namespace KASHOP.PL.Areas.Admin.Controllers
         }
 
         [HttpPost("")]
-        public IActionResult Create([FromBody] BrandRequest request)
+        public IActionResult Create([FromForm] BrandRequest request)
         {
-            var id = _brandService.Create(request);
+            var id = _brandService.CreateFile(request);
             return CreatedAtAction(nameof(Get), new { id }, new { message = request });
         }
         [HttpPatch("{id}")]
