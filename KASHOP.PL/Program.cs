@@ -40,6 +40,7 @@ namespace KASHOP.PL
             builder.Services.AddScoped<IProductRepository,ProductRepository>();
             builder.Services.AddScoped<ICartRepository,CartRepository>();
             builder.Services.AddScoped<IProductService, BLL.Services.Classes.ProductService>();
+            builder.Services.AddScoped<ICheckOutService,CheckOutService>();
             builder.Services.AddScoped<ICartService, CartService>();
 
             builder.Services.AddScoped<IFileService, BLL.Services.Classes.FileService>();

@@ -1,6 +1,7 @@
 ﻿using KASHOP.BLL.Services.Interfaces;
 using KASHOP.DAL.DTO.Requests;
 using KASHOP.DAL.DTO.Responses;
+using KASHOP.DAL.Models;
 using KASHOP.DAL.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Stripe.Checkout;
@@ -19,28 +20,38 @@ namespace KASHOP.BLL.Services.Classes
         {
             _cartRepository = cartRepository;
         }
+
         public Task<CheckOutResponse> ProccessPaymentAsync(CheckOutRequest request, string userId, HttpRequest Request)
         {
             var cartItems = _cartRepository.GetUserCart(userId);
             if (!cartItems.Any())
             {
-                return new Task<CheckOutResponse>(() => new CheckOutResponse
+                return Task.FromResult(new CheckOutResponse
                 {
                     Success = false,
                     Message = "Cart is empty"
                 });
             }
 
-            if (request.PaymentMethod == "Cash") 
+
+            Order order = new Order
             {
-                return new Task<CheckOutResponse>(() => new CheckOutResponse
+                UserId = userId,
+                PaymentMethod = PaymentMethodEnum.Cash,
+                TotalAmount = cartItems.Sum(c => c.Product.Price * c.Count),
+            };
+
+
+            if (request.PaymentMethod == PaymentMethodEnum.Cash) 
+            {
+                return Task.FromResult(new CheckOutResponse
                 {
                     Success = true,
                     Message = "Order placed successfully. Pay on delivery."
                 });
             }
 
-            if (request.PaymentMethod == "Visa")
+            if (request.PaymentMethod == PaymentMethodEnum.Visa)
             {
                 var options = new SessionCreateOptions
                 {
@@ -50,8 +61,8 @@ namespace KASHOP.BLL.Services.Classes
 
                     },
                     Mode = "payment",
-                    SuccessUrl = $"{Request.Scheme}://{Request.Host}/checkout/success",
-                    CancelUrl = $"{Request.Scheme}://{Request.Host}/checkout/cancel",
+                    SuccessUrl = $"{Request.Scheme}://{Request.Host}/api/Customer/CheckOuts/success/{order.Id}",
+                    CancelUrl = $"{Request.Scheme}://{Request.Host}/api/Customer/CheckOuts/cancel",
                 };
                 foreach (var item in cartItems)
                 {
@@ -72,19 +83,27 @@ namespace KASHOP.BLL.Services.Classes
                 }
                 var service = new SessionService();
                 var session = service.Create(options);
-                return new Task<CheckOutResponse>(() => new CheckOutResponse
+                order.PaymentId = session.Id;
+                return Task.FromResult(new CheckOutResponse
                 {
                     Success = true,
                     Message = "Payment processed successfully",
-                    //SessionId = session.Id
+                    PaymentId = session.Id,
                     Url = session.Url
                 });
             }
-            return new Task<CheckOutResponse>(() => new CheckOutResponse
+            return Task.FromResult(new CheckOutResponse
             {
                 Success = false,
                 Message = "Invalid payment method"
             });
+        }
+
+
+
+        public Task<bool> HandlePaymentSuccessAsync(int orderId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
