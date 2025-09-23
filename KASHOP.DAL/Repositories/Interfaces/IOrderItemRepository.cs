@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace KASHOP.DAL.Repositories.Interfaces
 {
-    public interface ICartRepository
+    public interface IOrderItemRepository
     {
-        Task<int> AddAsync(Cart cart);
-        Task<List<Cart>> GetUserCartAsync(string userId);
+        Task AddRangeAsync(List<OrderItems> orderItems);
     }
 }

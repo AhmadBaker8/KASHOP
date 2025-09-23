@@ -39,6 +39,8 @@ namespace KASHOP.PL
             builder.Services.AddScoped<IBrandService,BrandService>();
             builder.Services.AddScoped<IProductRepository,ProductRepository>();
             builder.Services.AddScoped<ICartRepository,CartRepository>();
+            builder.Services.AddScoped<IOrderRepository,OrderRepository>();
+            builder.Services.AddScoped<IOrderItemRepository,OrderItemRepository>();
             builder.Services.AddScoped<IProductService, BLL.Services.Classes.ProductService>();
             builder.Services.AddScoped<ICheckOutService,CheckOutService>();
             builder.Services.AddScoped<ICartService, CartService>();

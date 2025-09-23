@@ -13,15 +13,15 @@ namespace KASHOP.DAL.Repositories.Classes
         {
             _context = context;
         }
-        public int Add(Cart cart)
+        public async Task<int> AddAsync(Cart cart)
         {
-            _context.Cart.Add(cart);
-            return _context.SaveChanges();
+            _context.Cart.AddAsync(cart);
+            return await _context.SaveChangesAsync();
         }
 
-        public List<Cart> GetUserCart(string userId)
+        public async Task<List<Cart>> GetUserCartAsync(string userId)
         {
-            return _context.Cart.Include(c=>c.Product).Where(c => c.UserId == userId).ToList();
+            return await _context.Cart.Include(c=>c.Product).Where(c => c.UserId == userId).ToListAsync();
         }
     }
 }

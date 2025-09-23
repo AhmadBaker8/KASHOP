@@ -28,12 +28,13 @@ namespace KASHOP.PL.Areas.Customer.Controllers
             return Ok(response);
         }
 
-        [HttpGet("Success")]
+        [HttpGet("Success/{orderId}")]
         [AllowAnonymous]
 
-        public IActionResult Success()
+        public async Task<IActionResult> Success([FromRoute] int orderId)
         {
-            return Ok("success");
+            var result = await _checkOutService.HandlePaymentSuccessAsync(orderId);
+            return Ok(result);
         }
     }
 }

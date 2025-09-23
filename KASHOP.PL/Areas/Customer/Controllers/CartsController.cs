@@ -20,18 +20,18 @@ namespace KASHOP.PL.Areas.Customer.Controllers
         }
 
         [HttpPost("")]
-        public IActionResult AddToCart(CartRequest request)
+        public async Task<IActionResult> AddToCartAsync(CartRequest request)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var result = _cartService.AddToCart(request,userId);
+            var result = await _cartService.AddToCartAsync(request,userId);
             return result ? Ok() : BadRequest();
         }
         [HttpGet("")]
 
-        public IActionResult GetUerCart()
+        public async Task<IActionResult> GetUerCartAsync()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var result = _cartService.CartSummaryResponse(userId);
+            var result = await _cartService.CartSummaryResponseAsync(userId);
             return Ok(result);
         }
 
