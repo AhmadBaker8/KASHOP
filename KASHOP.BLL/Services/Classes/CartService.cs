@@ -45,5 +45,10 @@ namespace KASHOP.BLL.Services.Classes
             };
             return response;
         }
+
+        public async Task<bool> ClearCartAsync(string userId)
+        {
+            return await _cartRepository.ClearCartAsync(userId);
+        }
     }
 }

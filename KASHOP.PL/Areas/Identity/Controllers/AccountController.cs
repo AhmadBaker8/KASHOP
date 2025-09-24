@@ -32,7 +32,7 @@ namespace KASHOP.PL.Areas.Identity.Controllers
             return Ok(result);
         }
 
-        [HttpGet("confirmEmail")]
+        [HttpGet("ConfirmEmail")]
         public async Task<ActionResult<string>> ConfirmEmail([FromQuery] string token, [FromQuery] string userId)
         {
             var result = await _authenticationService.ConfirmEmail(token, userId);

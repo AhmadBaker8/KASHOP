@@ -11,5 +11,7 @@ namespace KASHOP.DAL.Repositories.Interfaces
     {
         Task<int> AddAsync(Cart cart);
         Task<List<Cart>> GetUserCartAsync(string userId);
+
+        Task<bool> ClearCartAsync(string userId);
     }
 }

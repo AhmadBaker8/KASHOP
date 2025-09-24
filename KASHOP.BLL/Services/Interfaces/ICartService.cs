@@ -14,5 +14,7 @@ namespace KASHOP.BLL.Services.Interfaces
 
         Task<CartSummaryResponse> CartSummaryResponseAsync(string userId);
 
+        Task<bool> ClearCartAsync(string userId);
+
     }
 }

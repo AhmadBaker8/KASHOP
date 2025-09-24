@@ -79,7 +79,7 @@ namespace KASHOP.BLL.Services.Classes
 
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var escapeToken = Uri.EscapeDataString(token);
-                var emailUrl = $"{request.Scheme}://{request.Host}/api/identity/Account/ConfimEmail?token={escapeToken}&userId={user.Id}";
+                var emailUrl = $"{request.Scheme}://{request.Host}/api/Identity/Account/ConfirmEmail?token={escapeToken}&userId={user.Id}";
 
                 await _userManager.AddToRoleAsync(user, "Customer");
 

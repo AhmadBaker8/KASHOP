@@ -20,12 +20,14 @@ namespace KASHOP.BLL.Services.Classes
         private readonly IOrderRepository _orderRepository;
         private readonly IEmailSender _emailSender;
         private readonly IOrderItemRepository _orderItemRepository;
-        public CheckOutService(ICartRepository cartRepository, IOrderRepository orderRepository, IEmailSender emailSender,IOrderItemRepository orderItemRepository)
+        private readonly IProductRepository _productRepository;
+        public CheckOutService(ICartRepository cartRepository, IOrderRepository orderRepository, IEmailSender emailSender,IOrderItemRepository orderItemRepository,IProductRepository productRepository)
         {
             _cartRepository = cartRepository;
             _orderRepository = orderRepository;
             _emailSender = emailSender;
             _orderItemRepository = orderItemRepository;
+            _productRepository = productRepository;
         }
 
         public async Task<CheckOutResponse> ProccessPaymentAsync(CheckOutRequest request, string userId, HttpRequest Request)
@@ -121,6 +123,7 @@ namespace KASHOP.BLL.Services.Classes
 
                 var carts = await _cartRepository.GetUserCartAsync(order.UserId);
                 var orderItems = new List<OrderItems>();
+                var productUpdates = new List<(int productId, int qunatity)>();
                 foreach (var item in carts)
                 {
                     var orderItem = new OrderItems
@@ -134,8 +137,12 @@ namespace KASHOP.BLL.Services.Classes
                     };
 
                     orderItems.Add(orderItem);
+                    productUpdates.Add((item.ProductId, item.Count));
                 }
                 await _orderItemRepository.AddRangeAsync(orderItems);
+                await _cartRepository.ClearCartAsync(order.UserId);
+                await _productRepository.DecreaseQuantityAsync(productUpdates);
+
 
 
 
