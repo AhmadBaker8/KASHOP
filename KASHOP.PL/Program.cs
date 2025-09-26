@@ -30,6 +30,16 @@ namespace KASHOP.PL
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
+            builder.Services.AddCors(options =>
+            {
+               options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
@@ -41,9 +51,12 @@ namespace KASHOP.PL
             builder.Services.AddScoped<ICartRepository,CartRepository>();
             builder.Services.AddScoped<IOrderRepository,OrderRepository>();
             builder.Services.AddScoped<IOrderItemRepository,OrderItemRepository>();
+            builder.Services.AddScoped<IUserRepository,UserRepository>();
             builder.Services.AddScoped<IProductService, BLL.Services.Classes.ProductService>();
             builder.Services.AddScoped<ICheckOutService,CheckOutService>();
             builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
 
             builder.Services.AddScoped<IFileService, BLL.Services.Classes.FileService>();
 
@@ -103,6 +116,8 @@ namespace KASHOP.PL
 
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowAll");
 
             app.UseAuthorization();
             // ???? ?????

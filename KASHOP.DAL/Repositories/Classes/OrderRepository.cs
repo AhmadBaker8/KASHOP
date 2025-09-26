@@ -18,12 +18,9 @@ namespace KASHOP.DAL.Repositories.Classes
             _context = context;
         }
 
-        
 
-        public async Task<Order?> GetUserByOrderAsync(int orderId)
-        {
-            return await _context.Orders.Include(o => o.User).FirstOrDefaultAsync(o => o.Id == orderId);
-        }
+
+
 
 
         public async Task<Order?> AddAsync(Order order)
@@ -31,6 +28,37 @@ namespace KASHOP.DAL.Repositories.Classes
             await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
             return order;
+        }
+
+        public async Task<Order?> GetUserByOrderAsync(int orderId)
+        {
+            return await _context.Orders.Include(o => o.User).FirstOrDefaultAsync(o => o.Id == orderId);
+        }
+
+
+
+        public async Task<List<Order>> GetByStatusAsync(OrderStatus orderStatus)
+        {
+            return await _context.Orders.Where(o => o.Status == orderStatus)
+                .OrderByDescending(o => o.OrderDate).ToListAsync();
+        }
+
+        public async Task<List<Order>> GetOrderByUserAsync(string userId)
+        {
+            return await _context.Orders
+                .Include(o => o.User).OrderByDescending(o => o.OrderDate).ToListAsync();
+        }
+        public async Task<bool> ChangeStatusAsync(int orederId, OrderStatus newStatus)
+        {
+            var order = await _context.Orders.FindAsync(orederId);
+            if (order is null)
+            {
+                return false;
+            }
+            order.Status = newStatus;
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }
