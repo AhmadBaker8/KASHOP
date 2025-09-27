@@ -18,6 +18,7 @@ namespace KASHOP.DAL.DTO.Requests
 
         //img
         public IFormFile MainImage { get; set; }
+        public List<IFormFile> SubImages { get; set; } = new List<IFormFile>();
 
 
         public double Rate { get; set; }

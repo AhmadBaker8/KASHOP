@@ -50,5 +50,12 @@ namespace KASHOP.DAL.Repositories.Classes
             await _context.SaveChangesAsync();
 
         }
+
+        public List<Product> GetAllProductsWithImages()
+        {
+            return _context.Products
+                .Include(p => p.SubImages)
+                .ToList();
+        }
     }
 }

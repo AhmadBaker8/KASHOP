@@ -12,12 +12,15 @@ namespace KASHOP.DAL.DTO.Responses
 {
     public class ProductResponse
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        [JsonIgnore]
+        
         public int Quantity { get; set; }
+        [JsonIgnore]
         public string MainImage { get; set; }
-        public string MainImageUrl => $"https://localhost:7156/images/{MainImage}";
+        public string MainImageUrl { get; set; }
+        public List<string> SubImagesUrls { get; set; } = new List<string>();
 
     }
 }
