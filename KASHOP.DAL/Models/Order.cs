@@ -50,5 +50,7 @@ namespace KASHOP.DAL.Models
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
 
-    }
+        public List<OrderItems> OrderItems { get; set; }
+
+        }
 }

@@ -16,5 +16,7 @@ namespace KASHOP.DAL.Repositories.Interfaces
 
         Task<List<Order>> GetOrderByUserAsync(string userId);
         Task<bool> ChangeStatusAsync(int orederId, OrderStatus newStatus);
+
+        Task<bool> UserHasApprovedOrderForProductAsync(string userId, int productId);
     }
 }

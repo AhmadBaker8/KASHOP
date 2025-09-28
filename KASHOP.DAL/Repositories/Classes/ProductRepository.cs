@@ -55,6 +55,8 @@ namespace KASHOP.DAL.Repositories.Classes
         {
             return _context.Products
                 .Include(p => p.SubImages)
+                .Include(p => p.Reviews)
+                .ThenInclude(r => r.User)
                 .ToList();
         }
     }

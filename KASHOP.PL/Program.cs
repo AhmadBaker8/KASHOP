@@ -52,11 +52,14 @@ namespace KASHOP.PL
             builder.Services.AddScoped<IOrderRepository,OrderRepository>();
             builder.Services.AddScoped<IOrderItemRepository,OrderItemRepository>();
             builder.Services.AddScoped<IUserRepository,UserRepository>();
+            builder.Services.AddScoped<IReviewRepository,ReviewRepository>();
             builder.Services.AddScoped<IProductService, BLL.Services.Classes.ProductService>();
             builder.Services.AddScoped<ICheckOutService,CheckOutService>();
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<ReportService>();
+            builder.Services.AddScoped<IReviewService, BLL.Services.Classes.ReviewService>();
 
             builder.Services.AddScoped<IFileService, BLL.Services.Classes.FileService>();
 

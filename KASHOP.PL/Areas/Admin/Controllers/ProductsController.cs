@@ -22,7 +22,13 @@ namespace KASHOP.PL.Areas.Admin.Controllers
             _productService = productService;
         }
         [HttpGet("")]
-        public IActionResult GetAll() => Ok(_productService.GetAllProducts(Request));
+        public IActionResult GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
+        {
+
+           var products = _productService.GetAllProducts(Request, pageNumber, pageSize, false);
+            return Ok(products);
+        }
+        
 
         [HttpPost("")]
         public async Task<IActionResult> Create([FromForm] ProductRequest request)
