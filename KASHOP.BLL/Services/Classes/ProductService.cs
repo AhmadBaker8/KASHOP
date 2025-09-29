@@ -43,7 +43,7 @@ namespace KASHOP.BLL.Services.Classes
 
         public async Task<List<ProductResponse>> GetAllProducts(HttpRequest httpRequest, int pageNumber = 1, int pageSize = 1, bool onlyActive = false)
         {
-            var products = _productRepository.GetAllProductsWithImages();
+            var products = await _productRepository.GetAllProductsAsync();
             if (onlyActive)
             {
                 products = products.Where(p => p.Status == Status.Active).ToList();
@@ -51,24 +51,69 @@ namespace KASHOP.BLL.Services.Classes
 
             var pagedProducts = products.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToList();
 
+            return MapProductsToResponse(httpRequest, pagedProducts);
+        }
+
+        public async Task<ProductResponse?> GetById(HttpRequest httpRequest, int id)
+        {
+            var products = await _productRepository.GetAllProductsAsync();
+            var product = products.FirstOrDefault(p => p.Id == id);
+
+            if (product == null) return null;
+
+            return MapProductsToResponse(httpRequest, new List<Product> { product }).FirstOrDefault();
+        }
+        public async Task<List<ProductResponse>> GetByCategory(HttpRequest httpRequest, int categoryId, int pageNumber = 1, int pageSize = 10)
+        {
+            var products = await _productRepository.GetProductsByCategoryIdAsync(categoryId);
+            
+
+            return MapProductsToResponse(httpRequest, products);
+        }
+        public async Task<List<ReviewResponse>> GetReviews(int productId)
+        {
+            var products = await _productRepository.GetAllProductsAsync();
+            var productsReview = products.FirstOrDefault(p => p.Id == productId);
+
+            if (productsReview == null || productsReview.Reviews == null)
+                return new List<ReviewResponse>();
+
+            return productsReview.Reviews.Select(r => new ReviewResponse
+            {
+                Id = r.Id,
+                FullName = r.User.FullName,
+                Comment = r.Comment,
+                Rate = r.Rate
+            }).ToList();
+        }
+        
 
 
-            return pagedProducts.Select( p => new ProductResponse
+
+
+        private List<ProductResponse> MapProductsToResponse(HttpRequest httpRequest, List<Product> products)
+        {
+            return products.Select(p => new ProductResponse
             {
                 Id = p.Id,
                 Name = p.Name,
                 Quantity = p.Quantity,
                 MainImageUrl = $"{httpRequest.Scheme}://{httpRequest.Host}/images/{p.MainImage}",
-                SubImagesUrls = p.SubImages?.Select(si => $"{httpRequest.Scheme}://{httpRequest.Host}/Images/{si.ImageName}").ToList(),
-                Reviews = p.Reviews.Select(r => new ReviewResponse
+                SubImagesUrls = p.SubImages?.Select(si => $"{httpRequest.Scheme}://{httpRequest.Host}/images/{si.ImageName}").ToList(),
+                Description = p.Description,
+                Price = p.Price,
+                Discount = p.Discount,
+                CategoryId = p.CategoryId,
+                CategoryName = p.Category?.Name,
+                CreatedAt = p.CreatedAt,
+                Reviews = p.Reviews?.Select(r => new ReviewResponse
                 {
                     Id = r.Id,
                     FullName = r.User.FullName,
                     Comment = r.Comment,
-                    Rate = r.Rate,
+                    Rate = r.Rate
                 }).ToList()
             }).ToList();
-
         }
 
 

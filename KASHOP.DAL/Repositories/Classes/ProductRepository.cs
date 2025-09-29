@@ -51,13 +51,31 @@ namespace KASHOP.DAL.Repositories.Classes
 
         }
 
-        public List<Product> GetAllProductsWithImages()
+        public async Task<List<Product>> GetAllProductsAsync()
         {
-            return _context.Products
+            return await _context.Products
                 .Include(p => p.SubImages)
                 .Include(p => p.Reviews)
                 .ThenInclude(r => r.User)
-                .ToList();
+                .ToListAsync();
         }
+        public async Task<Product?> GetByIdAsync(int id)
+        {
+            return await _context.Products
+                .Include(p => p.SubImages)
+                .Include(p => p.Reviews)
+                .ThenInclude(r => r.User)
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
+        public async Task<List<Product>> GetProductsByCategoryIdAsync(int categoryId)
+        {
+            return await _context.Products
+                .Include(p => p.SubImages)
+                .Include(p => p.Reviews)
+                .ThenInclude(r => r.User)
+                .Where(p => p.CategoryId == categoryId)
+                .ToListAsync();
+        }
+
     }
 }

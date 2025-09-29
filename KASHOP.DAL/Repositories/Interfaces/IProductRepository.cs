@@ -11,6 +11,8 @@ namespace KASHOP.DAL.Repositories.Interfaces
     {
         Task DecreaseQuantityAsync(List<(int productId,int qunatity)> items);
 
-        List<Product> GetAllProductsWithImages();
+        Task<List<Product>> GetAllProductsAsync();
+        Task<List<Product>> GetProductsByCategoryIdAsync(int categoryId);
+        Task<Product?> GetByIdAsync(int id);
     }
 }

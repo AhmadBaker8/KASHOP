@@ -15,5 +15,9 @@ namespace KASHOP.BLL.Services.Interfaces
         Task<int> CreateProduct(ProductRequest request);
 
         Task<List<ProductResponse>> GetAllProducts(HttpRequest httpRequest, int pageNumber = 1, int pageSize = 1, bool onlyActive = false);
+        Task<List<ProductResponse>> GetByCategory(HttpRequest httpRequest, int categoryId, int pageNumber = 1, int pageSize = 10);
+
+        Task<ProductResponse?> GetById(HttpRequest httpRequest, int id);
+        Task<List<ReviewResponse>> GetReviews(int productId);
     }
 }

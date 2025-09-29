@@ -11,6 +11,12 @@ namespace KASHOP.BLL.Services.Interfaces
 {
     public interface ICategoryService : IGenericService<CategoryRequest, CategoryResponse, Category>
     {
-       
+        Task<List<CategoryResponse>> GetAllCategories();
+        Task<CategoryResponse> GetCategoryById(int id);
+        Task<int> CreateCategory(CategoryRequest request);
+        Task<bool> UpdateCategory(int id, CategoryRequest request);
+        Task<bool> DeleteCategory(int id);
+        Task<bool> ToggleStatus(int id);
+
     }
 }

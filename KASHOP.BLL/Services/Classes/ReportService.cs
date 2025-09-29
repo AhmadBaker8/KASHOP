@@ -38,8 +38,8 @@ namespace KASHOP.BLL.Services.Classes
                         .Column(x =>
                         {
                             x.Spacing(20);
-
-                            foreach(var item in _productRepository.GetAllProductsWithImages())
+                            var items = _productRepository.GetAllProductsAsync().Result;
+                            foreach (var item in items)
                             {
                                 x.Item().Text($"{item.Name} - {item.Price} - {item.Quantity} units")
                                 .FontSize(20);

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,7 +38,15 @@ namespace KASHOP.DAL.Data
             builder.Ignore<IdentityUserClaim<string>>();
             builder.Ignore<IdentityUserLogin<string>>();
             builder.Ignore<IdentityUserToken<string>>();
-            builder.Ignore<IdentityRoleClaim<string>>(); 
+            builder.Ignore<IdentityRoleClaim<string>>();
+
+
+            // Relation: Category - Product
+            builder.Entity<Product>()
+                .HasOne(p => p.Category)
+                .WithMany(c => c.Products)
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
